@@ -5,21 +5,21 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ornio-no/filament-decorated-column/fix-code-style.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/ornio-no/filament-decorated-column/actions?query=workflow%3Afix-code-style+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ornio/filament-decorated-column.svg?style=flat-square)](https://packagist.org/packages/ornio/filament-decorated-column)
 
-`DecoratedColumn` and `DecoratedEntry` are Filament's `TextColumn` and `TextEntry` with a slot before and a slot after the text. The slots hold `Badge` and `Icon` decorations. A badge can carry an icon and a tooltip, an icon can stand on its own, and every decoration takes closures that see the row's record. The views use inline styles and Filament's own `fi-*` classes, so there is no theme to build and no `@source` line to add.
+`DecoratedColumn` and `DecoratedEntry` are Filament's `TextColumn` and `TextEntry` with a slot before and a slot after the text. The slots hold `BadgeDecoration` and `IconDecoration` objects. A badge can carry an icon and a tooltip, an icon can stand on its own, and every decoration takes closures that see the row's record. The views use inline styles and Filament's own `fi-*` classes, so there is no theme to build and no `@source` line to add.
 
 ```php
 use App\Models\Client;
 use Filament\Support\Icons\Heroicon;
-use Ornio\FilamentDecoratedColumn\Badge;
+use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
-use Ornio\FilamentDecoratedColumn\Icon;
+use Ornio\FilamentDecoratedColumn\IconDecoration;
 
 DecoratedColumn::make('name')
     ->prefixDecorations([
-        Icon::make('type')->icon(Heroicon::OutlinedBriefcase)->label('Business'),
+        IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)->label('Business'),
     ])
     ->suffixBadges([
-        Badge::make('vip')
+        BadgeDecoration::make('vip')
             ->label('VIP')
             ->color('success')
             ->visible(fn (Client $record): bool => $record->is_vip),
@@ -46,12 +46,12 @@ php artisan vendor:publish --tag="filament-decorated-column-views"
 
 ### Table columns
 
-`DecoratedColumn` extends `TextColumn`, so `description()`, `searchable()`, `sortable()`, `wrap()`, and the rest work unchanged. Add decorations with `prefixDecorations()` and `suffixDecorations()`, or their aliases `prefixBadges()` and `suffixBadges()`. All four take an array of `Badge` and `Icon` objects, or a closure that returns one.
+`DecoratedColumn` extends `TextColumn`, so `description()`, `searchable()`, `sortable()`, `wrap()`, and the rest work unchanged. Add decorations with `prefixDecorations()` and `suffixDecorations()`, or their aliases `prefixBadges()` and `suffixBadges()`. All four take an array of `BadgeDecoration` and `IconDecoration` objects, or a closure that returns one.
 
 ```php
 use App\Models\Client;
 use Filament\Tables\Table;
-use Ornio\FilamentDecoratedColumn\Badge;
+use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
 
 public static function configure(Table $table): Table
@@ -60,7 +60,7 @@ public static function configure(Table $table): Table
         DecoratedColumn::make('name')
             ->description(fn (Client $record): ?string => $record->registration_number)
             ->suffixBadges([
-                Badge::make('type')
+                BadgeDecoration::make('type')
                     ->label(fn (Client $record): string => $record->type->getLabel())
                     ->color(fn (Client $record): string => $record->type->getColor()),
             ])
@@ -79,11 +79,11 @@ use App\Models\Activity;
 use Filament\Support\Enums\IconSize;
 use Filament\Support\Icons\Heroicon;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
-use Ornio\FilamentDecoratedColumn\Icon;
+use Ornio\FilamentDecoratedColumn\IconDecoration;
 
 DecoratedColumn::make('description')
     ->prefixDecorations([
-        Icon::make('type')
+        IconDecoration::make('type')
             ->icon(fn (Activity $record): Heroicon => $record->type->getIcon())
             ->size(IconSize::Large),
     ])
@@ -97,7 +97,7 @@ DecoratedColumn::make('description')
 ```php
 use App\Models\Client;
 use Filament\Schemas\Schema;
-use Ornio\FilamentDecoratedColumn\Badge;
+use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedEntry;
 
 public static function configure(Schema $schema): Schema
@@ -105,7 +105,7 @@ public static function configure(Schema $schema): Schema
     return $schema->components([
         DecoratedEntry::make('name')
             ->suffixBadges([
-                Badge::make('type')
+                BadgeDecoration::make('type')
                     ->label(fn (Client $record): string => $record->type->getLabel())
                     ->color(fn (Client $record): string => $record->type->getColor()),
             ]),
@@ -117,7 +117,7 @@ Both work in any table or infolist, inside a panel or in the standalone packages
 
 ## Badges
 
-`Badge::make('name')` creates a badge. The name doubles as the default label: `Badge::make('hot')` reads "Hot" and `Badge::make('is_paid')` reads "Is paid".
+`BadgeDecoration::make('name')` creates a badge. The name doubles as the default label: `BadgeDecoration::make('hot')` reads "Hot" and `BadgeDecoration::make('is_paid')` reads "Is paid".
 
 | Method | What it sets | Default |
 | --- | --- | --- |
@@ -143,12 +143,12 @@ use App\Models\TeamMember;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
 
-Badge::make('you')
+BadgeDecoration::make('you')
     ->color('gray')
     ->tooltip('You cannot change your own role.')
     ->visible(fn (TeamMember $record): bool => $record->user_id === auth()->id()),
 
-Badge::make('paid')
+BadgeDecoration::make('paid')
     ->color('success')
     ->icon(Heroicon::OutlinedCheckCircle)
     ->iconPosition(IconPosition::After),
@@ -156,7 +156,7 @@ Badge::make('paid')
 
 ## Icons
 
-`Icon::make('name')` renders an icon with no badge around it.
+`IconDecoration::make('name')` renders an icon with no badge around it.
 
 | Method | What it sets | Default |
 | --- | --- | --- |
@@ -170,7 +170,7 @@ Badge::make('paid')
 Without `label()` the icon is decorative and carries `aria-hidden="true"`. That is right when the text beside it already says what the icon means. Give a label when the icon carries meaning on its own, and add `tooltip()` to show that meaning on hover too.
 
 ```php
-Icon::make('type')
+IconDecoration::make('type')
     ->icon(Heroicon::OutlinedBriefcase)
     ->label('Business')
     ->tooltip('Business client'),
@@ -184,8 +184,8 @@ Icon::make('type')
 DecoratedColumn::make('name')
     ->asPills()
     ->suffixBadges([
-        Badge::make('new'),
-        Badge::make('draft')->isPill(false),
+        BadgeDecoration::make('new'),
+        BadgeDecoration::make('draft')->isPill(false),
     ]);
 ```
 
@@ -206,7 +206,7 @@ On `TextColumn` and `TextEntry`, `separator()` means something else: it splits a
 
 ## Closure parameters
 
-Every closure on a `Badge` or `Icon` can ask for these parameters by name:
+Every closure on a `BadgeDecoration` or `IconDecoration` can ask for these parameters by name:
 
 - `$record`: the row's Eloquent model, or null when the column has none.
 - `$state`: the decoration's own resolved label, not the column's state.
@@ -219,7 +219,7 @@ Parameters match by name, so call them exactly that. The type hint can be your m
 ```php
 use App\Models\Invoice;
 
-Badge::make('status')
+BadgeDecoration::make('status')
     ->label(fn (Invoice $record): string => $record->status->getLabel())
     ->color(fn (string $state): string => $state === 'Overdue' ? 'danger' : 'gray'),
 ```

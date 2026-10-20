@@ -14,7 +14,7 @@ use Illuminate\Contracts\Support\Htmlable;
  * A badge beside the column text: label, color, size, weight, font
  * family, pill, visibility, and an optional icon and tooltip.
  */
-class Badge extends Decoration
+class BadgeDecoration extends Decoration
 {
     use HasFontFamily;
     use HasWeight;

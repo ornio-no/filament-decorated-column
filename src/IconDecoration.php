@@ -14,7 +14,7 @@ use Illuminate\Contracts\Support\Htmlable;
  * the text beside it already says what the icon means. Colour defaults
  * to gray.
  */
-class Icon extends Decoration
+class IconDecoration extends Decoration
 {
     protected string $view = 'filament-decorated-column::icon';
 

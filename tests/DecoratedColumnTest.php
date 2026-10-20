@@ -4,10 +4,10 @@ use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
 use Livewire\Livewire;
-use Ornio\FilamentDecoratedColumn\Badge;
+use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
 use Ornio\FilamentDecoratedColumn\DecoratedEntry;
-use Ornio\FilamentDecoratedColumn\Icon;
+use Ornio\FilamentDecoratedColumn\IconDecoration;
 use Ornio\FilamentDecoratedColumn\Tests\Fixtures\Client;
 use Ornio\FilamentDecoratedColumn\Tests\Fixtures\ListClients;
 
@@ -17,11 +17,11 @@ it('renders prefix and suffix badges', function () {
     $column = DecoratedColumn::make('name')
         ->record($client)
         ->prefixBadges([
-            Badge::make('vip')->label(fn (Client $record): string => "VIP {$record->name}")->color('success'),
+            BadgeDecoration::make('vip')->label(fn (Client $record): string => "VIP {$record->name}")->color('success'),
         ])
         ->suffixBadges([
-            Badge::make('hot')->color('danger'),
-            Badge::make('hidden')->label('Never shown')->visible(false),
+            BadgeDecoration::make('hot')->color('danger'),
+            BadgeDecoration::make('hidden')->label('Never shown')->visible(false),
         ]);
 
     expect($column->getPrefix()->toHtml())
@@ -39,7 +39,7 @@ it('accepts badges from a closure, as pills when the column asks', function () {
     $column = DecoratedColumn::make('name')
         ->record($client)
         ->asPills()
-        ->suffixBadges(fn (): array => [Badge::make('a'), Badge::make('b')->isPill(false)]);
+        ->suffixBadges(fn (): array => [BadgeDecoration::make('a'), BadgeDecoration::make('b')->isPill(false)]);
 
     expect(substr_count($column->getSuffix()->toHtml(), 'border-radius: 9999px'))->toBe(1);
 });
@@ -50,10 +50,10 @@ it('renders icons inside badges and as bare decorations, with the separator on b
     $column = DecoratedColumn::make('name')
         ->record($client)
         ->prefixDecorations([
-            Icon::make('type')->icon(Heroicon::OutlinedBriefcase)->label('Business')->tooltip('Business client'),
+            IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)->label('Business')->tooltip('Business client'),
         ])
         ->suffixBadges([
-            Badge::make('paid')->icon(Heroicon::OutlinedCheckCircle)->iconPosition(IconPosition::After),
+            BadgeDecoration::make('paid')->icon(Heroicon::OutlinedCheckCircle)->iconPosition(IconPosition::After),
         ]);
 
     $prefix = $column->getPrefix()->toHtml();
@@ -75,7 +75,7 @@ it('uses a custom separator without splitting the column text on it', function (
     $column = DecoratedColumn::make('name')
         ->record($client)
         ->separator(':')
-        ->suffixBadges([Badge::make('new')]);
+        ->suffixBadges([BadgeDecoration::make('new')]);
 
     expect($column->getSeparator())->toBeNull()
         ->and($column->getSuffix()->toHtml())->toContain('<span style="opacity:0.375;">:</span>');
@@ -85,7 +85,7 @@ it('decorates infolist entries the same way', function () {
     $client = Client::create(['name' => 'Acme']);
 
     $entry = DecoratedEntry::make('name')
-        ->suffixBadges([Badge::make('vip')->label(fn (Client $record): string => "VIP {$record->name}")]);
+        ->suffixBadges([BadgeDecoration::make('vip')->label(fn (Client $record): string => "VIP {$record->name}")]);
 
     $entry->container(Schema::make()->record($client));
 
@@ -95,7 +95,7 @@ it('decorates infolist entries the same way', function () {
 it('hides an unlabelled icon from screen readers', function () {
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Globex']))
-        ->prefixDecorations([Icon::make('type')->icon(Heroicon::OutlinedBriefcase)]);
+        ->prefixDecorations([IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)]);
 
     expect($column->getPrefix()->toHtml())
         ->toContain('aria-hidden="true"')
@@ -106,7 +106,7 @@ it('drops the separator when it is blank, widening the gap instead', function ()
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Globex']))
         ->separator('')
-        ->prefixDecorations([Icon::make('type')->icon(Heroicon::OutlinedBriefcase)]);
+        ->prefixDecorations([IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)]);
 
     expect($column->getPrefix()->toHtml())
         ->toContain('margin-inline-end:0.5rem')
@@ -117,8 +117,8 @@ it('tints icons gray by default and with the given palette otherwise', function 
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Globex']))
         ->prefixDecorations([
-            Icon::make('default')->icon(Heroicon::OutlinedBriefcase),
-            Icon::make('paid')->icon(Heroicon::OutlinedCheckCircle)->color('success'),
+            IconDecoration::make('default')->icon(Heroicon::OutlinedBriefcase),
+            IconDecoration::make('paid')->icon(Heroicon::OutlinedCheckCircle)->color('success'),
         ]);
 
     expect($column->getPrefix()->toHtml())
@@ -139,7 +139,7 @@ it('renders the decorations inside a real Filament table cell', function () {
 
     // Only the decorated cell is inspected: the table around it can render
     // its own SVGs (pagination, actions), while a plain TextColumn cell
-    // renders none, so an <svg> here can only come from the Icon.
+    // renders none, so an <svg> here can only come from the IconDecoration.
     $cells = (new DOMXPath($document))
         ->query("//td[contains(concat(' ', normalize-space(@class), ' '), ' fi-ta-cell-name ')]");
 

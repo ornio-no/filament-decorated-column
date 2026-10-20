@@ -6,7 +6,7 @@ use Filament\Tables\Columns\TextColumn;
 use Ornio\FilamentDecoratedColumn\Concerns\HasDecorations;
 
 /**
- * A TextColumn with Badge and Icon decorations before or after its
+ * A TextColumn with badge and icon decorations before or after its
  * text. See HasDecorations for the API.
  */
 class DecoratedColumn extends TextColumn

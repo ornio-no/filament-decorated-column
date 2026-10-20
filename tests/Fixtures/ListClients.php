@@ -11,9 +11,9 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Livewire\Component;
-use Ornio\FilamentDecoratedColumn\Badge;
+use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
-use Ornio\FilamentDecoratedColumn\Icon;
+use Ornio\FilamentDecoratedColumn\IconDecoration;
 
 class ListClients extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -28,10 +28,10 @@ class ListClients extends Component implements HasActions, HasSchemas, HasTable
             ->columns([
                 DecoratedColumn::make('name')
                     ->prefixDecorations([
-                        Icon::make('type')->icon(Heroicon::OutlinedBriefcase),
+                        IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase),
                     ])
                     ->suffixBadges([
-                        Badge::make('tier')->label('Platinum Tier')->color('success'),
+                        BadgeDecoration::make('tier')->label('Platinum Tier')->color('success'),
                     ]),
             ]);
     }
