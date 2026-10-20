@@ -16,7 +16,7 @@ return RectorConfig::configure()
     )
     ->withPhpSets()
     ->withSkip([
-        // Ported from fatura-app without strict_types; kept diffable against that source.
+        // Ported without strict_types; kept diffable against the original source.
         SafeDeclareStrictTypesRector::class => [
             __DIR__ . '/src/DecoratedColumn.php',
             __DIR__ . '/src/DecoratedEntry.php',
