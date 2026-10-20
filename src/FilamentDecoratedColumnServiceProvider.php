@@ -10,11 +10,11 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
+use Ornio\FilamentDecoratedColumn\Commands\FilamentDecoratedColumnCommand;
+use Ornio\FilamentDecoratedColumn\Testing\TestsFilamentDecoratedColumn;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Ornio\FilamentDecoratedColumn\Commands\FilamentDecoratedColumnCommand;
-use Ornio\FilamentDecoratedColumn\Testing\TestsFilamentDecoratedColumn;
 
 class FilamentDecoratedColumnServiceProvider extends PackageServiceProvider
 {
