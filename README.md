@@ -1,8 +1,8 @@
 # Filament Decorated Column
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ornio/filament-decorated-column.svg?style=flat-square)](https://packagist.org/packages/ornio/filament-decorated-column)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ornio/filament-decorated-column/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/ornio/filament-decorated-column/actions?query=workflow%3Atests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ornio/filament-decorated-column/fix-code-style.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/ornio/filament-decorated-column/actions?query=workflow%3Afix-code-style+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ornio-no/filament-decorated-column/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/ornio-no/filament-decorated-column/actions?query=workflow%3Atests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ornio-no/filament-decorated-column/fix-code-style.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/ornio-no/filament-decorated-column/actions?query=workflow%3Afix-code-style+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ornio/filament-decorated-column.svg?style=flat-square)](https://packagist.org/packages/ornio/filament-decorated-column)
 
 `DecoratedColumn` and `DecoratedEntry` are Filament's `TextColumn` and `TextEntry` with a slot before and a slot after the text. The slots hold `Badge` and `Icon` decorations. A badge can carry an icon and a tooltip, an icon can stand on its own, and every decoration takes closures that see the row's record. The views use inline styles and Filament's own `fi-*` classes, so there is no theme to build and no `@source` line to add.
@@ -244,7 +244,7 @@ Please review [our security policy](.github/SECURITY.md) on how to report securi
 
 ## Credits
 
-- [Flamur Mavraj](https://github.com/ornio)
+- [Flamur Mavraj](https://github.com/oxodesign)
 - [All Contributors](../../contributors)
 
 ## License
