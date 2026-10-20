@@ -1,13 +1,18 @@
 {
     "name": "ornio/filament-decorated-column",
-    "description": "Display additional decorated context",
+    "description": "Badge and icon decorations before or after the text of Filament table columns and infolist entries. Needs no custom theme.",
     "keywords": [
         "ornio",
         "laravel",
         "filamentphp",
         "filament",
         "filament-plugin",
-        "filament-decorated-column"
+        "filament-decorated-column",
+        "filament-tables",
+        "filament-infolists",
+        "table-column",
+        "badge",
+        "icon"
     ],
     "homepage": "https://github.com/ornio/filament-decorated-column",
     "support": {
@@ -24,7 +29,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "filament/filament": "^5.0",
+        "filament/filament": "^5.7",
         "spatie/laravel-package-tools": "^1.15.0"
     },
     "require-dev": {
@@ -40,8 +45,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ornio\\FilamentDecoratedColumn\\": "src/",
-            "Ornio\\FilamentDecoratedColumn\\Database\\Factories\\": "database/factories/"
+            "Ornio\\FilamentDecoratedColumn\\": "src/"
         }
     },
     "autoload-dev": {
@@ -62,10 +66,7 @@
         "laravel": {
             "providers": [
                 "Ornio\\FilamentDecoratedColumn\\FilamentDecoratedColumnServiceProvider"
-            ],
-            "aliases": {
-                "FilamentDecoratedColumn": "Ornio\\FilamentDecoratedColumn\\Facades\\FilamentDecoratedColumn"
-            }
+            ]
         }
     },
     "config": {
