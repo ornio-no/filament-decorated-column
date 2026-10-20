@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Ornio\FilamentDecoratedColumn\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FilamentDecoratedColumnCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-decorated-column';
 
     public $description = 'My command';
 
