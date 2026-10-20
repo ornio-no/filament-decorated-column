@@ -15,8 +15,9 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * One piece of a DecoratedColumn / DecoratedEntry prefix or suffix: a
- * Badge or an Icon. Closures resolve `$record` (the row), `$state` (the
- * decoration's label), and `$livewire` from the owning column or entry.
+ * BadgeDecoration or an IconDecoration. Closures resolve `$record` (the
+ * row), `$state` (the decoration's label), and `$livewire` from the
+ * owning column or entry.
  */
 abstract class Decoration extends ViewComponent
 {
