@@ -12,11 +12,15 @@ See the spec's "Documentation" section: `.scratch/more-decorations/spec.md`.
 
 **Blocked by:** 02 (Dot decoration), 03 (Image decoration), 04 (Text decoration), 05 (Color decoration), 06 (Trend decoration), 07 (Progress decoration)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The README has a section for each of the six new decorations, with an example that matches the built API.
-- [ ] The README's closure-parameters section covers the new data setters.
-- [ ] The README's introduction no longer implies that badges and icons are the only decorations.
-- [ ] The agent guide's architecture section describes the new decorations and the shared behaviour.
-- [ ] The CHANGELOG is unchanged.
-- [ ] Every example in the README uses a method that exists, with its real defaults.
+- [x] The README has a section for each of the six new decorations, with an example that matches the built API.
+- [x] The README's closure-parameters section covers the new data setters.
+- [x] The README's introduction no longer implies that badges and icons are the only decorations.
+- [x] The agent guide's architecture section describes the new decorations and the shared behaviour.
+- [x] The CHANGELOG is unchanged.
+- [x] Every example in the README uses a method that exists, with its real defaults.
+
+## Comments
+
+Resolved in merge b4b104d. Code review (merge 41d07ca) removed the Text font limitation note, because the fonts now work.

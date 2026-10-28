@@ -22,17 +22,21 @@ See the spec's Trend user stories and "Per decoration: Trend": `.scratch/more-de
 
 **Blocked by:** 01 (Share the decorative rule, tooltip markup and palette-mark colour), 04 (Text decoration)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] A rise renders an up arrow, a plus sign and the success text colour, for example "+12.5%".
-- [ ] A fall renders a down arrow, a minus sign "−" and the danger text colour.
-- [ ] Zero renders in gray with no arrow and no sign.
-- [ ] A value that rounds to zero (for example 0.04 with 1 decimal) renders as zero.
-- [ ] `inverse()` swaps the success and danger colours.
-- [ ] `decimals()` changes the rounding. `unit()` changes the unit, and null removes it.
-- [ ] The arrow is hidden from screen readers.
-- [ ] A null change renders nothing. A slot holding only that decoration has no separator.
-- [ ] Number formatting doesn't depend on the `intl` extension.
-- [ ] A tooltip renders the shared tooltip markup.
-- [ ] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
-- [ ] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+- [x] A rise renders an up arrow, a plus sign and the success text colour, for example "+12.5%".
+- [x] A fall renders a down arrow, a minus sign "−" and the danger text colour.
+- [x] Zero renders in gray with no arrow and no sign.
+- [x] A value that rounds to zero (for example 0.04 with 1 decimal) renders as zero.
+- [x] `inverse()` swaps the success and danger colours.
+- [x] `decimals()` changes the rounding. `unit()` changes the unit, and null removes it.
+- [x] The arrow is hidden from screen readers.
+- [x] A null change renders nothing. A slot holding only that decoration has no separator.
+- [x] Number formatting doesn't depend on the `intl` extension.
+- [x] A tooltip renders the shared tooltip markup.
+- [x] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
+- [x] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+
+## Comments
+
+Resolved in merge 805d53a. A numeric string counts as a number, and the inherited `color()` is ignored. Code review (merge 41d07ca): `NAN` and infinity count as nothing to show, and one lookup per direction replaces three `match` blocks.

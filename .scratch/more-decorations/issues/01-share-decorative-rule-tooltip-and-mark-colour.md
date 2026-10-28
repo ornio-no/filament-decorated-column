@@ -12,11 +12,15 @@ See the spec's "Shared behaviour" section: `.scratch/more-decorations/spec.md`.
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The decorative rule lives on the decoration base and is reachable from every decoration, including the icon decoration, under the same public method name as today.
-- [ ] The tooltip markup exists once and the icon view uses it.
-- [ ] The mark-colour logic exists once and the icon view uses it.
-- [ ] No public method is renamed, re-defaulted or removed.
-- [ ] Every existing test passes unchanged, including the unlabelled icon being hidden from screen readers and the gray and palette icon tints.
-- [ ] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+- [x] The decorative rule lives on the decoration base and is reachable from every decoration, including the icon decoration, under the same public method name as today.
+- [x] The tooltip markup exists once and the icon view uses it.
+- [x] The mark-colour logic exists once and the icon view uses it.
+- [x] No public method is renamed, re-defaulted or removed.
+- [x] Every existing test passes unchanged, including the unlabelled icon being hidden from screen readers and the gray and palette icon tints.
+- [x] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+
+## Comments
+
+Resolved in merge 4780e6e on `oxodesign/lombok-strait`. Code review (merge 41d07ca) also moved the screen-reader attributes into a shared partial and added a palette-name check to the shared mark colour.

@@ -12,14 +12,18 @@ See the spec's Text user stories, "Palette colours" and "Per decoration: Text": 
 
 **Blocked by:** 01 (Share the decorative rule, tooltip markup and palette-mark colour)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The label from a closure that reads `$record` appears. With no label, the name-derived label appears.
-- [ ] HTML in the label is escaped.
-- [ ] Gray text uses shade 500. Palette text uses `light-dark()` with shades 600 and 400.
-- [ ] The text-colour logic is shared, so another decoration can reuse it.
-- [ ] Weight and font-family settings add Filament's `fi-font-*` classes.
-- [ ] No font size is set on the text.
-- [ ] A tooltip renders the shared tooltip markup.
-- [ ] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
-- [ ] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+- [x] The label from a closure that reads `$record` appears. With no label, the name-derived label appears.
+- [x] HTML in the label is escaped.
+- [x] Gray text uses shade 500. Palette text uses `light-dark()` with shades 600 and 400.
+- [x] The text-colour logic is shared, so another decoration can reuse it.
+- [x] Weight and font-family settings take effect (inline styles; see Comments).
+- [x] No font size is set on the text.
+- [x] A tooltip renders the shared tooltip markup.
+- [x] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
+- [x] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+
+## Comments
+
+Resolved in merge 64246cb. Code review (merge 41d07ca): `fi-font-*` classes have no effect outside Filament's own text items, so a `FontWeight` or `FontFamily` enum now renders as an inline `font-weight`/`font-family` instead; plain strings stay classes. The criterion about `fi-font-*` classes is superseded by this.

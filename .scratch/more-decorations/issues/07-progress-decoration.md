@@ -13,14 +13,18 @@ See the spec's Progress user stories and "Per decoration: Progress": `.scratch/m
 
 **Blocked by:** 01 (Share the decorative rule, tooltip markup and palette-mark colour)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The fill width is the value's percentage of the maximum, with both the default maximum and a custom one.
-- [ ] A value above the maximum fills the bar completely. A value below zero leaves it empty.
-- [ ] A maximum of zero or less shows an empty bar without an error.
-- [ ] The fill is the primary mark shade by default, and the given palette's mark shade when coloured.
-- [ ] With a label, the bar has progress-bar semantics: value, minimum, maximum and label. Without a label, it's hidden from screen readers.
-- [ ] A null value renders nothing. A slot holding only that decoration has no separator.
-- [ ] A tooltip renders the shared tooltip markup.
-- [ ] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
-- [ ] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+- [x] The fill width is the value's percentage of the maximum, with both the default maximum and a custom one.
+- [x] A value above the maximum fills the bar completely. A value below zero leaves it empty.
+- [x] A maximum of zero or less shows an empty bar without an error.
+- [x] The fill is the primary mark shade by default, and the given palette's mark shade when coloured.
+- [x] With a label, the bar has progress-bar semantics: value, minimum, maximum and label. Without a label, it's hidden from screen readers.
+- [x] A null value renders nothing. A slot holding only that decoration has no separator.
+- [x] A tooltip renders the shared tooltip markup.
+- [x] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
+- [x] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+
+## Comments
+
+Resolved in merge 8d5d348. The track is 3.75rem × 0.375rem, and `aria-valuenow` reports the clamped value. Code review (merge 41d07ca): `aria-valuemax` is 0 when max ≤ 0.

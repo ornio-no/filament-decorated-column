@@ -13,15 +13,19 @@ See the spec's Color user stories, "Per decoration: Color" and the CSS-injection
 
 **Blocked by:** 01 (Share the decorative rule, tooltip markup and palette-mark colour)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Each accepted format renders a square filled with that raw colour.
-- [ ] A CSS-injection attempt (for example a value that closes the declaration and adds another) renders nothing.
-- [ ] A plain word that isn't one of the accepted formats (for example `red`) renders nothing.
-- [ ] Null renders nothing. A slot holding only that decoration has no separator.
-- [ ] Setting the inherited `color()` doesn't change the sample.
-- [ ] The square has a thin neutral border.
-- [ ] Hidden from screen readers without a label, and exposed as an image named by its label with one.
-- [ ] A tooltip renders the shared tooltip markup.
-- [ ] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
-- [ ] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+- [x] Each accepted format renders a square filled with that raw colour.
+- [x] A CSS-injection attempt (for example a value that closes the declaration and adds another) renders nothing.
+- [x] A plain word that isn't one of the accepted formats (for example `red`) renders nothing.
+- [x] Null renders nothing. A slot holding only that decoration has no separator.
+- [x] Setting the inherited `color()` doesn't change the sample.
+- [x] The square has a thin neutral border.
+- [x] Hidden from screen readers without a label, and exposed as an image named by its label with one.
+- [x] A tooltip renders the shared tooltip markup.
+- [x] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
+- [x] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+
+## Comments
+
+Resolved in merge 0eb907b. Only literal spaces separate the parts of a functional colour; tabs and newlines are rejected.

@@ -13,14 +13,18 @@ See the spec's Image user stories and "Per decoration: Image": `.scratch/more-de
 
 **Blocked by:** 01 (Share the decorative rule, tooltip markup and palette-mark colour)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The URL from a closure that reads `$record` appears as the image source.
-- [ ] Square by default, fully rounded with `circular()`.
-- [ ] Default size is 1.25rem. A custom `size()` changes both width and height.
-- [ ] The image covers its box without distortion and is lazily loaded.
-- [ ] Alternative text is empty without a label and is the label with one.
-- [ ] A null URL renders nothing. A slot holding only that image returns the owner's plain prefix or suffix with no separator.
-- [ ] A tooltip renders the shared tooltip markup.
-- [ ] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
-- [ ] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+- [x] The URL from a closure that reads `$record` appears as the image source.
+- [x] Square by default, fully rounded with `circular()`.
+- [x] Default size is 1.25rem. A custom `size()` changes both width and height.
+- [x] The image covers its box without distortion and is lazily loaded.
+- [x] Alternative text is empty without a label and is the label with one.
+- [x] A null URL renders nothing. A slot holding only that image returns the owner's plain prefix or suffix with no separator.
+- [x] A tooltip renders the shared tooltip markup.
+- [x] Tests go through the column's prefix and suffix HTML, in a test file for this decoration.
+- [x] Pest, the Pint check, PHPStan and the Rector dry run all pass.
+
+## Comments
+
+Resolved in merge 06df133. An empty-string URL also counts as nothing to show. Code review (merge 41d07ca): `size()` now accepts only an int or a CSS length and falls back to 1.25rem otherwise.
