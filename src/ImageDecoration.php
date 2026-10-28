@@ -10,6 +10,15 @@ use Closure;
  */
 class ImageDecoration extends Decoration
 {
+    /**
+     * A non-negative number with a CSS length or percentage unit, such as
+     * '12px', '1.5rem' or '50%'. \z, not $, so a trailing newline is
+     * rejected too.
+     */
+    private const LENGTH_PATTERN = '/\A(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)(?:px|r?em|ch|ex|vw|vh|vmin|vmax|cm|mm|in|pt|pc|%)\z/i';
+
+    private const DEFAULT_SIZE = '1.25rem';
+
     protected string $view = 'filament-decorated-column::image';
 
     protected string | Closure | null $image = null;
@@ -52,13 +61,23 @@ class ImageDecoration extends Decoration
 
     /**
      * The CSS length of the image's width and height, one line of text
-     * (1.25rem) by default.
+     * (1.25rem) by default. The size lands in an inline style and may come
+     * from row data through a closure, so anything but an int or a length
+     * in a known unit falls back to the default.
      */
     public function getSize(): string
     {
-        $size = $this->evaluate($this->size) ?? '1.25rem';
+        $size = $this->evaluate($this->size);
 
-        return is_int($size) ? $size . 'px' : $size;
+        if (is_int($size)) {
+            return $size . 'px';
+        }
+
+        if (is_string($size) && preg_match(self::LENGTH_PATTERN, $size) === 1) {
+            return $size;
+        }
+
+        return self::DEFAULT_SIZE;
     }
 
     public function isCircular(): bool

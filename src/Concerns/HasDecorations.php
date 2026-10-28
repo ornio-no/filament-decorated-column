@@ -11,9 +11,9 @@ use Ornio\FilamentDecoratedColumn\Decoration;
 
 /**
  * The prefix / suffix slots of DecoratedColumn and DecoratedEntry
- * (prefixBadges, suffixBadges, asPills, separator), holding badge and
- * icon decorations; prefixDecorations() and suffixDecorations() are
- * the same slots under a neutral name.
+ * (prefixDecorations, suffixDecorations, asPills, separator), each
+ * holding decorations of any kind; prefixBadges() and suffixBadges()
+ * are the same slots under their original names.
  *
  * separator() never touches the parent's list-state separator, so a
  * value containing the separator character is not split into several

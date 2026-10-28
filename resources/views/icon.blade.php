@@ -14,12 +14,7 @@
 @endphp
 
 <span
-    @if ($isDecorative())
-        aria-hidden="true"
-    @else
-        role="img"
-        aria-label="{{ $getLabel() }}"
-    @endif
+    @include('filament-decorated-column::partials.screen-reader', ['decorative' => $isDecorative(), 'label' => $getLabel()])
     style="display: inline-flex;"
     @include('filament-decorated-column::partials.tooltip', ['tooltip' => $getTooltip()])
 >

@@ -14,10 +14,10 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * One piece of a DecoratedColumn / DecoratedEntry prefix or suffix: a
- * BadgeDecoration or an IconDecoration. Closures resolve `$record` (the
- * row), `$state` (the decoration's label), and `$livewire` from the
- * owning column or entry.
+ * One piece of a DecoratedColumn / DecoratedEntry prefix or suffix, such
+ * as a badge, an icon or a trend. Each kind is a subclass with its own
+ * view. Closures resolve `$record` (the row), `$state` (the decoration's
+ * label), and `$livewire` from the owning column or entry.
  */
 abstract class Decoration extends ViewComponent
 {
@@ -79,9 +79,9 @@ abstract class Decoration extends ViewComponent
      */
     public function getMarkColor(): ?string
     {
-        $color = $this->getColor() ?? 'gray';
+        $color = $this->getPaletteName();
 
-        if (! is_string($color)) {
+        if ($color === null) {
             return null;
         }
 
@@ -98,9 +98,9 @@ abstract class Decoration extends ViewComponent
      */
     public function getTextColor(): ?string
     {
-        $color = $this->getColor() ?? 'gray';
+        $color = $this->getPaletteName();
 
-        if (! is_string($color)) {
+        if ($color === null) {
             return null;
         }
 
@@ -109,6 +109,24 @@ abstract class Decoration extends ViewComponent
         }
 
         return 'light-dark(var(--' . $color . '-600), var(--' . $color . '-400))';
+    }
+
+    /**
+     * The palette name that getMarkColor() and getTextColor() put into a
+     * var() in an inline style: gray when no colour is set, and also when
+     * the name holds anything but lowercase letters, digits and hyphens,
+     * because a name from a closure could otherwise inject CSS. Null for
+     * a custom (array) palette.
+     */
+    private function getPaletteName(): ?string
+    {
+        $color = $this->getColor() ?? 'gray';
+
+        if (! is_string($color)) {
+            return null;
+        }
+
+        return preg_match('/^[a-z0-9-]+\z/', $color) === 1 ? $color : 'gray';
     }
 
     public function getRecord(): ?Model

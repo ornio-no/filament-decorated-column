@@ -12,6 +12,16 @@ use Filament\Support\Icons\Heroicon;
  */
 class TrendDecoration extends Decoration
 {
+    /**
+     * What each direction from getDirection() shows: its colour, arrow
+     * and sign. The minus sign is U+2212, not a hyphen.
+     */
+    private const DIRECTIONS = [
+        1 => ['color' => 'success', 'arrow' => Heroicon::ArrowUp, 'sign' => '+'],
+        -1 => ['color' => 'danger', 'arrow' => Heroicon::ArrowDown, 'sign' => '−'],
+        0 => ['color' => 'gray', 'arrow' => null, 'sign' => ''],
+    ];
+
     protected string $view = 'filament-decorated-column::trend';
 
     protected int | float | Closure | null $value = null;
@@ -80,47 +90,41 @@ class TrendDecoration extends Decoration
     /**
      * The change rounded to decimals() places, or null when there is none.
      * A numeric string, which a decimal column gives, counts as a number.
+     * NAN and infinity are not a change that can be shown, so they count
+     * as none.
      */
     public function getValue(): ?float
     {
         $change = $this->evaluate($this->value);
 
-        if (! is_numeric($change)) {
+        if (! is_numeric($change) || ! is_finite((float) $change)) {
             return null;
         }
 
         return round((float) $change, $this->getDecimals());
     }
 
+    /**
+     * The colour of the direction, or of the opposite direction with
+     * inverse().
+     */
     public function getColor(): string | array | null
     {
         $direction = $this->getDirection();
 
-        return match ($this->isInverse() ? -$direction : $direction) {
-            1 => 'success',
-            -1 => 'danger',
-            0 => 'gray',
-        };
+        return self::DIRECTIONS[$this->isInverse() ? -$direction : $direction]['color'];
     }
 
     public function getArrow(): ?Heroicon
     {
-        return match ($this->getDirection()) {
-            1 => Heroicon::ArrowUp,
-            -1 => Heroicon::ArrowDown,
-            0 => null,
-        };
+        return self::DIRECTIONS[$this->getDirection()]['arrow'];
     }
 
     public function getFormattedValue(): string
     {
-        $sign = match ($this->getDirection()) {
-            1 => '+',
-            -1 => '−',
-            0 => '',
-        };
-
-        return $sign . number_format(abs($this->getValue()), $this->getDecimals(), '.', '') . $this->getUnit();
+        return self::DIRECTIONS[$this->getDirection()]['sign']
+            . number_format(abs($this->getValue()), $this->getDecimals(), '.', '')
+            . $this->getUnit();
     }
 
     /**

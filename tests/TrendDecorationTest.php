@@ -6,14 +6,6 @@ use Ornio\FilamentDecoratedColumn\DecoratedColumn;
 use Ornio\FilamentDecoratedColumn\Tests\Fixtures\Client;
 use Ornio\FilamentDecoratedColumn\TrendDecoration;
 
-// The path of a Heroicon arrow at the small icon size, to tell which arrow rendered.
-function trendArrow(string $direction): string
-{
-    preg_match('/\sd="([^"]+)"/', svg('heroicon-c-arrow-' . $direction)->contents(), $matches);
-
-    return 'd="' . $matches[1] . '"';
-}
-
 it('shows a rise as an up arrow, a plus sign and the success colour', function () {
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Acme']))
@@ -154,6 +146,22 @@ it('leaves the slot empty when the change is null, so the owner shows its plain 
         ->and($column->getSuffix())->toBe(' NOK');
 });
 
+it('leaves the slot empty for a change that is not a finite number', function (mixed $change) {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Acme']))
+        ->suffix(' NOK')
+        ->prefixDecorations([TrendDecoration::make('growth')->value(fn (): mixed => $change)])
+        ->suffixDecorations([TrendDecoration::make('growth')->value(fn (): mixed => $change)]);
+
+    expect($column->getPrefix())->toBeNull()
+        ->and($column->getSuffix())->toBe(' NOK');
+})->with([
+    'NAN' => NAN,
+    'INF' => INF,
+    '-INF' => -INF,
+    'a numeric string too large for a float' => '1e999',
+]);
+
 it('hides the arrow from screen readers and leaves the signed number to carry the direction', function () {
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Acme']))
@@ -161,13 +169,7 @@ it('hides the arrow from screen readers and leaves the signed number to carry th
 
     $html = $column->getSuffix()->toHtml();
 
-    $document = new DOMDocument;
-    $previous = libxml_use_internal_errors(true);
-    $document->loadHTML('<?xml encoding="UTF-8"><div>' . $html . '</div>');
-    libxml_clear_errors();
-    libxml_use_internal_errors($previous);
-
-    $xpath = new DOMXPath($document);
+    $xpath = htmlXPath($html);
 
     expect($xpath->query('//svg'))->toHaveCount(1)
         ->and($xpath->query('//svg[ancestor-or-self::*[@aria-hidden="true"]]'))->toHaveCount(1)
