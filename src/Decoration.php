@@ -62,6 +62,32 @@ abstract class Decoration extends ViewComponent
         return $this->evaluate($this->tooltip);
     }
 
+    /**
+     * True when no label() was given: screen readers skip the decoration
+     * because the text beside it already says what it means. Checks the
+     * raw label, since getLabel() falls back to the name.
+     */
+    public function isDecorative(): bool
+    {
+        return $this->label === null;
+    }
+
+    /**
+     * The inline CSS colour of a mark such as an icon: gray shade 400 when
+     * no colour is set, shade 500 of any other palette colour. Null for a
+     * custom (array) palette, which has no named shades.
+     */
+    public function getMarkColor(): ?string
+    {
+        $color = $this->getColor() ?? 'gray';
+
+        if (! is_string($color)) {
+            return null;
+        }
+
+        return 'var(--' . $color . '-' . ($color === 'gray' ? 400 : 500) . ')';
+    }
+
     public function getRecord(): ?Model
     {
         $record = $this->column->getRecord();
