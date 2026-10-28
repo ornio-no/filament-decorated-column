@@ -3,6 +3,7 @@
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\HtmlString;
 use Livewire\Livewire;
 use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
@@ -124,6 +125,46 @@ it('tints icons gray by default and with the given palette otherwise', function 
     expect($column->getPrefix()->toHtml())
         ->toContain('color: var(--gray-400)')
         ->toContain('color: var(--success-500)');
+});
+
+it('keeps an icon coloured gray on purpose at the default gray shade', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)->color('gray')]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain('color: var(--gray-400)')
+        ->not->toContain('--gray-500');
+});
+
+it('tints an icon with a custom palette through Filament colour variables', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)->color(['500' => '#ff6600'])]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain('--color-500: #ff6600')
+        ->toContain('fi-color');
+});
+
+it('gives an icon a tooltip that allows HTML only when the tooltip is HTML', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([
+            IconDecoration::make('plain')->icon(Heroicon::OutlinedBriefcase)->tooltip('Business client'),
+            IconDecoration::make('html')->icon(Heroicon::OutlinedBriefcase)->tooltip(new HtmlString('<b>VIP</b>')),
+            IconDecoration::make('none')->icon(Heroicon::OutlinedBriefcase),
+        ]);
+
+    $html = $column->getPrefix()->toHtml();
+
+    expect(substr_count($html, 'x-tooltip='))->toBe(2)
+        ->and($html)
+        ->toContain("content: 'Business client'")
+        ->toContain('allowHTML: false')
+        ->toContain("content: '\\u003Cb\\u003EVIP\\u003C\\/b\\u003E'")
+        ->toContain('allowHTML: true')
+        ->toContain('theme: $store.theme');
 });
 
 it('renders the decorations inside a real Filament table cell', function () {

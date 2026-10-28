@@ -2,18 +2,15 @@
 @use('Filament\Support\View\ComponentAttributeBag')
 
 @php
-    $tooltip = $getTooltip();
-
     // Filament only tints icons that are direct children of a text cell,
-    // so the colour is set here: gray-400 by default, shade 500 for any
-    // other palette (the same shades a TextColumn icon uses).
-    $color = $getColor() ?? 'gray';
+    // so the colour is set here.
+    $markColor = $getMarkColor();
 
     $iconAttributes = new ComponentAttributeBag(['aria-hidden' => 'true']);
 
-    $iconAttributes = is_string($color)
-        ? $iconAttributes->style('color: var(--' . e($color) . '-' . ($color === 'gray' ? 400 : 500) . ')')
-        : $iconAttributes->color(IconComponent::class, $color);
+    $iconAttributes = $markColor !== null
+        ? $iconAttributes->style('color: ' . e($markColor))
+        : $iconAttributes->color(IconComponent::class, $getColor());
 @endphp
 
 <span
@@ -24,13 +21,7 @@
         aria-label="{{ $getLabel() }}"
     @endif
     style="display: inline-flex;"
-    @if (filled($tooltip))
-        x-tooltip="{
-            content: @js($tooltip),
-            theme: $store.theme,
-            allowHTML: @js($tooltip instanceof \Illuminate\Contracts\Support\Htmlable),
-        }"
-    @endif
+    @include('filament-decorated-column::partials.tooltip', ['tooltip' => $getTooltip()])
 >
     {{ \Filament\Support\generate_icon_html($getIcon(), attributes: $iconAttributes, size: $getSize()) }}
 </span>
