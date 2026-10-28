@@ -88,6 +88,29 @@ abstract class Decoration extends ViewComponent
         return 'var(--' . $color . '-' . ($color === 'gray' ? 400 : 500) . ')';
     }
 
+    /**
+     * The inline CSS colour of text such as a text or trend decoration:
+     * gray shade 500 in both modes when no colour is set or gray is given;
+     * any other palette colour at shade 600 in light mode and 400 in dark
+     * mode, through light-dark(), which follows the color-scheme Filament
+     * sets in dark mode. Null for a custom (array) palette, which has no
+     * named shades.
+     */
+    public function getTextColor(): ?string
+    {
+        $color = $this->getColor() ?? 'gray';
+
+        if (! is_string($color)) {
+            return null;
+        }
+
+        if ($color === 'gray') {
+            return 'var(--gray-500)';
+        }
+
+        return 'light-dark(var(--' . $color . '-600), var(--' . $color . '-400))';
+    }
+
     public function getRecord(): ?Model
     {
         $record = $this->column->getRecord();
