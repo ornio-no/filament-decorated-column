@@ -60,6 +60,36 @@ it('sizes the image one line tall by default and to a CSS length or a number of 
         ->toContain('height: 32px;');
 });
 
+it('accepts a size as a positive length in a CSS unit', function (string $size) {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Acme']))
+        ->prefixDecorations([ImageDecoration::make('logo')->image('https://example.com/logo.png')->size(fn (): string => $size)]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain("width: {$size};")
+        ->toContain("height: {$size};");
+})->with(['12px', '1.5rem', '2em', '50%', '.75rem']);
+
+it('falls back to the default size for anything but a CSS length or a number of pixels', function (mixed $size) {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Acme']))
+        ->prefixDecorations([ImageDecoration::make('logo')->image('https://example.com/logo.png')->size(fn (): mixed => $size)]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain('width: 1.25rem;')
+        ->toContain('height: 1.25rem;')
+        ->not->toContain('evil');
+})->with([
+    'another declaration after a length' => '2rem; background-image: url(https://evil.test/x.png)',
+    'a function' => 'calc(1rem + 2px)',
+    'a word' => 'large',
+    'a number without a unit' => '32',
+    'an unknown unit' => '2foo',
+    'a negative length' => '-2rem',
+    'a trailing newline' => "2rem\n",
+    'a float' => 1.5,
+]);
+
 it('gives an unlabelled image empty alternative text and a labelled one its label', function () {
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Acme']))

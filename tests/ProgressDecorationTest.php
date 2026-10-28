@@ -91,6 +91,21 @@ it('tells screen readers the clamped value, not the raw one', function () {
         ->and($column->getSuffix()->toHtml())->toContain('aria-valuenow="0"');
 });
 
+it('never tells screen readers a maximum below the minimum of 0', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Acme']))
+        ->prefixDecorations([ProgressDecoration::make('zero')->value(5)->max(0)->label('Seats used')])
+        ->suffixDecorations([ProgressDecoration::make('negative')->value(5)->max(fn (): int => -10)->label('Balance')]);
+
+    foreach ([$column->getPrefix()->toHtml(), $column->getSuffix()->toHtml()] as $html) {
+        expect($html)
+            ->toContain('aria-valuemin="0"')
+            ->toContain('aria-valuemax="0"')
+            ->toContain('aria-valuenow="0"')
+            ->not->toContain('-10');
+    }
+});
+
 it('renders nothing, and no separator, for a null progress value', function () {
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Acme']))

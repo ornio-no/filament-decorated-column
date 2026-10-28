@@ -167,6 +167,8 @@ BadgeDecoration::make('paid')
 | `tooltip()` | Text shown on hover. | None |
 | `visible()`, `hidden()` | Whether the icon renders. | Visible |
 
+The colour name goes into an inline style, so on an icon, dot, text, or progress bar a name holding anything but lowercase letters, digits, and hyphens draws gray instead. That keeps a name returned by a closure from injecting CSS.
+
 Without `label()` the icon is decorative and carries `aria-hidden="true"`. That is right when the text beside it already says what the icon means. Give a label when the icon carries meaning on its own, and add `tooltip()` to show that meaning on hover too.
 
 ```php
@@ -209,7 +211,7 @@ DecoratedColumn::make('name')
 | Method | What it sets | Default |
 | --- | --- | --- |
 | `image()` | The picture's URL. | None |
-| `size()` | Width and height: a CSS length such as `'2rem'`, or an integer number of pixels. | `'1.25rem'`, one line of text |
+| `size()` | Width and height: a CSS length such as `'2rem'`, `'12px'`, or `'50%'`, or an integer number of pixels. Anything else, such as `calc()`, a unitless number, or a negative length, falls back to the default. | `'1.25rem'`, one line of text |
 | `circular()` | Full rounding, for avatars. Calling it with no argument turns it on. | Square |
 | `label()` | The `alt` text. | None |
 | `tooltip()` | Text shown on hover. | None |
@@ -246,7 +248,7 @@ DecoratedColumn::make('name')
 
 `light-dark()` follows the `color-scheme: dark` that a Filament panel sets in dark mode. Outside a panel, coloured text keeps its light-mode shade unless your page sets `color-scheme` itself.
 
-`weight()` and `fontFamily()` put the same `fi-font-*` classes on the text as on a badge. Filament's stylesheet defines them only for its own text items and links, so they change the text only where your theme styles those classes.
+`weight()` and `fontFamily()` set the text's `font-weight` and `font-family` inline. A weight is set as its number, such as `700` for `FontWeight::Bold`. A family uses the font your panel is configured with (the `--font-family`, `--serif-font-family`, and `--mono-font-family` variables that Filament sets), followed by generic families for pages outside a panel. A string that is not a `FontWeight` or `FontFamily` value is added as a class instead, for your theme to style.
 
 ```php
 use App\Models\Invoice;
@@ -312,7 +314,7 @@ The direction is decided after rounding, so a change of `0.04` shows as a gray `
 | `tooltip()` | Text shown on hover. | None |
 | `visible()`, `hidden()` | Whether the trend renders. | Visible |
 
-The colour follows the direction, so the inherited `color()` is ignored. It uses the shades a text decoration uses. The number has a plain decimal point, no thousands separator, and no locale formatting. A null change renders nothing, as if it were hidden. Screen readers skip the arrow and read the signed number.
+The colour follows the direction, so the inherited `color()` is ignored. It uses the shades a text decoration uses. The number has a plain decimal point, no thousands separator, and no locale formatting. A null change, or one that is not a finite number (`NAN` or infinity), renders nothing, as if it were hidden. Screen readers skip the arrow and read the signed number.
 
 ```php
 use App\Models\Account;
@@ -347,7 +349,7 @@ DecoratedColumn::make('churn_rate')
 | `tooltip()` | Text shown on hover. | None |
 | `visible()`, `hidden()` | Whether the bar renders. | Visible |
 
-The value is clamped between 0 and the maximum, so the fill never overflows the track, and `aria-valuenow` reports the clamped value. A maximum of zero or less shows an empty bar. A null value renders nothing, as if it were hidden.
+The value is clamped between 0 and the maximum, so the fill never overflows the track, and `aria-valuenow` reports the clamped value. A maximum of zero or less shows an empty bar, and `aria-valuemax` reports it as 0. A null value renders nothing, as if it were hidden.
 
 Without `label()` the bar is decorative and hidden from screen readers, which suits a bar beside the figure it draws.
 
