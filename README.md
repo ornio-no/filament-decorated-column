@@ -2,12 +2,14 @@
 
 # Filament Decorated Column
 
+Decorate any text column or entry with rich prefixes and suffixes. Badges, dots, trends, progress bars and more, with no theme build needed.
+
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ornio/filament-decorated-column.svg?style=flat-square)](https://packagist.org/packages/ornio/filament-decorated-column)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ornio-no/filament-decorated-column/tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/ornio-no/filament-decorated-column/actions?query=workflow%3Atests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ornio-no/filament-decorated-column/fix-code-style.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/ornio-no/filament-decorated-column/actions?query=workflow%3Afix-code-style+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ornio/filament-decorated-column.svg?style=flat-square)](https://packagist.org/packages/ornio/filament-decorated-column)
 
-`DecoratedColumn` and `DecoratedEntry` are Filament's `TextColumn` and `TextEntry` with a slot before and a slot after the text. The slots hold decorations of eight kinds, in any mix: [badges](#badges), [icons](#icons), [dots](#dots), [images](#images), [secondary text](#text), [colour samples](#colors), [trends](#trends), and [progress bars](#progress). Every decoration takes a tooltip and closures that see the row's record. The views use inline styles and Filament's own `fi-*` classes, so there is no theme to build and no `@source` line to add.
+`DecoratedColumn` and `DecoratedEntry` are Filament's `TextColumn` and `TextEntry` with a slot before and a slot after the text. A status, an avatar, or a trend can then sit next to the value it describes instead of taking a column of its own. The slots hold decorations of eight kinds, in any mix: [badges](#badges), [icons](#icons), [dots](#dots), [images](#images), [secondary text](#text), [colour samples](#colors), [trends](#trends), and [progress bars](#progress). Every decoration can have a tooltip, and every setter accepts a closure that receives the row's record. The views use inline styles and Filament's own `fi-*` classes, so there is no theme to build and no `@source` line to add.
 
 ```php
 use App\Models\Client;
@@ -48,7 +50,7 @@ php artisan vendor:publish --tag="filament-decorated-column-views"
 
 ### Table columns
 
-`DecoratedColumn` extends `TextColumn`, so `description()`, `searchable()`, `sortable()`, `wrap()`, and the rest work unchanged. Add decorations with `prefixDecorations()` and `suffixDecorations()`, or their aliases `prefixBadges()` and `suffixBadges()`. All four take an array of decorations of any kind, such as a `DotDecoration` next to a `BadgeDecoration`, or a closure that returns one.
+`DecoratedColumn` extends `TextColumn`, so `description()`, `searchable()`, `sortable()`, `wrap()`, and the rest work unchanged. Add decorations with `prefixDecorations()` and `suffixDecorations()`, or their aliases `prefixBadges()` and `suffixBadges()`. All four take an array of decorations or a closure that returns one. The array can mix kinds, such as a `DotDecoration` next to a `BadgeDecoration`.
 
 ```php
 use App\Models\Client;
@@ -115,7 +117,7 @@ public static function configure(Schema $schema): Schema
 }
 ```
 
-Both work in any table or infolist, inside a panel or in the standalone packages.
+Both work in any table or infolist, whether it sits in a panel or in a Livewire component outside one.
 
 ## Badges
 
@@ -128,11 +130,11 @@ Both work in any table or infolist, inside a panel or in the standalone packages
 
 | Method | What it sets | Default |
 | --- | --- | --- |
-| `label()` | The text. | Derived from the name. |
+| `label()` | The text. | Derived from the name |
 | `color()` | A Filament colour name such as `success` or `gray`, or a palette array. | `primary` |
 | `size()` | `Size::ExtraSmall` to `Size::ExtraLarge`, or `xs` to `xl`. | `Size::Small` |
 | `weight()` | A `FontWeight` case or its string value. | `FontWeight::Medium` |
-| `fontFamily()` | `FontFamily::Sans`, `Serif`, or `Mono`, or the string. | Inherited. |
+| `fontFamily()` | `FontFamily::Sans`, `Serif`, or `Mono`, or the string. | Inherited |
 | `isPill()` | Full rounding (`border-radius: 9999px`) for this badge alone. `isPill(false)` opts out of the column's `asPills()`. `null` follows the column. | `null` |
 | `icon()` | An icon, such as `Heroicon::OutlinedCheckCircle`. | None |
 | `iconPosition()` | `IconPosition::Before` or `IconPosition::After`. | `IconPosition::Before` |
@@ -179,7 +181,7 @@ BadgeDecoration::make('paid')
 | `tooltip()` | Text shown on hover. | None |
 | `visible()`, `hidden()` | Whether the icon renders. | Visible |
 
-The colour name goes into an inline style, so on an icon, dot, text, or progress bar a name holding anything but lowercase letters, digits, and hyphens draws gray instead. That keeps a name returned by a closure from injecting CSS.
+On an icon, dot, text, or progress bar, the colour name goes into an inline style. A name holding anything but lowercase letters, digits, and hyphens draws gray instead, so a name returned by a closure can't inject CSS.
 
 Without `label()` the icon is decorative and carries `aria-hidden="true"`. That is right when the text beside it already says what the icon means. Give a label when the icon carries meaning on its own, and add `tooltip()` to show that meaning on hover too.
 
@@ -192,7 +194,7 @@ IconDecoration::make('type')
 
 ## Dots
 
-`DotDecoration::make('name')` renders a small filled circle, half a line tall, in a palette colour. Use it for a status. It has no size setting.
+`DotDecoration::make('name')` renders a filled circle 0.5rem across, in a palette colour. Use it for a status. It has no size setting.
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/dot-dark.png">
@@ -223,7 +225,7 @@ DecoratedColumn::make('name')
 
 ## Images
 
-`ImageDecoration::make('name')` renders a small picture from a URL, such as an avatar, a logo, or a flag. The picture fills its box without being stretched (`object-fit: cover`) and loads lazily.
+`ImageDecoration::make('name')` renders a small picture from a URL, such as an avatar, a logo, or a flag. The picture is cropped to fill its box, never stretched (`object-fit: cover`), and loads lazily.
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/image-dark.png">
@@ -233,7 +235,7 @@ DecoratedColumn::make('name')
 | Method | What it sets | Default |
 | --- | --- | --- |
 | `image()` | The picture's URL. | None |
-| `size()` | Width and height: a CSS length such as `'2rem'`, `'12px'`, or `'50%'`, or an integer number of pixels. Anything else, such as `calc()`, a unitless number, or a negative length, falls back to the default. | `'1.25rem'`, one line of text |
+| `size()` | Width and height: a CSS length such as `'2rem'`, `'12px'`, or `'50%'`, or an integer number of pixels. Anything else, such as `calc()`, a unitless string like `'32'`, or a negative length, falls back to the default. | `'1.25rem'`, one line of text |
 | `circular()` | Full rounding, for avatars. Calling it with no argument turns it on. | Square |
 | `label()` | The `alt` text. | None |
 | `tooltip()` | Text shown on hover. | None |
@@ -241,7 +243,7 @@ DecoratedColumn::make('name')
 
 Without `label()` the image is decorative and gets `alt=""`, so screen readers skip it. That suits an avatar beside the person's name.
 
-When `image()` gives null or an empty string, the image renders nothing, as if it were hidden. If nothing else in the slot renders, the separator goes too, so a row without a picture shows only its text.
+When the URL is null or an empty string, the image renders nothing, as if it were hidden. If nothing else in the slot renders, the separator goes too, so a row without a picture shows only its text.
 
 ```php
 use App\Models\User;
@@ -266,10 +268,10 @@ DecoratedColumn::make('name')
 
 | Method | What it sets | Default |
 | --- | --- | --- |
-| `label()` | The text. | Derived from the name. |
+| `label()` | The text. | Derived from the name |
 | `color()` | A Filament colour name. Gray draws with `var(--gray-500)`; any other name uses shade 600 in light mode and shade 400 in dark mode, through CSS `light-dark()`. Palette arrays are not supported. | `gray` |
-| `weight()` | A `FontWeight` case or its string value. | Inherited. |
-| `fontFamily()` | `FontFamily::Sans`, `Serif`, or `Mono`, or the string. | Inherited. |
+| `weight()` | A `FontWeight` case or its string value. | Inherited |
+| `fontFamily()` | `FontFamily::Sans`, `Serif`, or `Mono`, or the string. | Inherited |
 | `tooltip()` | Text shown on hover. | None |
 | `visible()`, `hidden()` | Whether the text renders. | Visible |
 
@@ -293,7 +295,7 @@ TextDecoration::make('overdue')
 
 ## Colors
 
-`ColorDecoration::make('name')` shows a raw colour from your data, such as a product's hex code, as a sample of itself. The sample is a 1.25rem square with slightly rounded corners and a thin translucent gray border, so white and black samples stay visible.
+`ColorDecoration::make('name')` shows a sample of a raw colour from your data, such as a product's hex code. The sample is a 1.25rem square with slightly rounded corners and a thin translucent gray border, so white and black samples stay visible.
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/color-dark.png">
@@ -351,7 +353,11 @@ The direction is decided after rounding, so a change of `0.04` shows as a gray `
 | `tooltip()` | Text shown on hover. | None |
 | `visible()`, `hidden()` | Whether the trend renders. | Visible |
 
-The colour follows the direction, so the inherited `color()` is ignored. It uses the shades a text decoration uses. The number has a plain decimal point, no thousands separator, and no locale formatting. A null change, or one that is not a finite number (`NAN` or infinity), renders nothing, as if it were hidden. Screen readers skip the arrow and read the signed number.
+The colour follows the direction, so the inherited `color()` is ignored. It uses the same shades as a text decoration: 600 in light mode and 400 in dark mode, or `var(--gray-500)` at zero.
+
+The number ignores the app's locale. It always has a `.` decimal point and no thousands separator, as in `+1234.5%`. A null change, or one that is not a finite number (`NAN` or infinity), renders nothing, as if it were hidden.
+
+Screen readers skip the arrow and read the signed number.
 
 ```php
 use App\Models\Account;
@@ -375,7 +381,7 @@ DecoratedColumn::make('churn_rate')
 
 ## Progress
 
-`ProgressDecoration::make('name')` shows a thin bar filled to show how far a value has come toward its maximum. The track is 3.75rem wide and 0.375rem tall, with rounded ends.
+`ProgressDecoration::make('name')` shows how close a value is to its maximum as a thin, partly filled bar. The track is 3.75rem wide and 0.375rem tall, with rounded ends.
 
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/progress-dark.png">
@@ -423,7 +429,7 @@ DecoratedColumn::make('name')
 
 ## Separator
 
-`separator()` sets the mark between the text and a non-empty slot. When you never call it, the mark is an em dash (`&mdash;`) at reduced opacity. Calling it with no argument sets a comma, because the method's own default is `','`. Pass a string or a closure. A blank string removes the mark and widens the gap between slot and text from 0.25rem to 0.5rem.
+`separator()` sets the mark between the text and a non-empty slot. It takes a string or a closure. By default the mark is an em dash (`&mdash;`) at 37.5% opacity. Calling `separator()` with no argument sets a comma, because the method's own default is `','`. A blank string removes the mark and widens the gap between slot and text from 0.25rem to 0.5rem.
 
 ```php
 DecoratedColumn::make('name')->separator('')->suffixBadges([/* ... */]);
@@ -434,7 +440,7 @@ The separator is output as raw HTML, so entities work and user input must never 
 
 Text set with `prefix()` or `suffix()` still renders, between the separator and the column text.
 
-On `TextColumn` and `TextEntry`, `separator()` means something else: it splits a string state into a list on that character. `DecoratedColumn` and `DecoratedEntry` replace that method, and the inherited `getSeparator()` stays null, so the state is never split. A value containing the separator character stays one value. If you need a list, give the column an array state.
+On `TextColumn` and `TextEntry`, `separator()` means something else: it splits a string state into a list on that character. `DecoratedColumn` and `DecoratedEntry` replace that method, and the inherited `getSeparator()` stays null, so the state is never split. With `separator(',')`, a name like `Smith, John` stays one value. If you need a list, give the column an array state.
 
 ## Closure parameters
 
@@ -446,7 +452,7 @@ Every closure on a decoration can ask for these parameters by name:
 
 Parameters match by name, so call them exactly that. The type hint can be your model class: `fn (Client $record)`. Other type-hinted parameters resolve from the container, as in any Filament closure.
 
-That includes the data setters: `image()` on an image, `value()` on a color, trend, or progress, and `max()` on a progress. They get the same three parameters as every other setter. None of them receives the column's state, so read the data from `$record`, as the examples above do.
+The data setters work the same way: `image()` on an image, `value()` on a colour sample, trend, or progress bar, and `max()` on a progress bar. None of them receives the column's state, so read the data from `$record`, as the examples above do.
 
 `$state` is for `color()`, `icon()`, `tooltip()`, `visible()`, `value()`, and the like. Don't request it inside `label()`: the label is what `$state` resolves to, so the closure would call itself. Inside `weight()` and `fontFamily()`, Filament's own traits inject `$state` as null.
 
@@ -466,15 +472,15 @@ composer test
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+See [CHANGELOG](CHANGELOG.md) for recent changes.
 
 ## Contributing
 
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+See [CONTRIBUTING](.github/CONTRIBUTING.md).
 
 ## Security Vulnerabilities
 
-Please review [our security policy](.github/SECURITY.md) on how to report security vulnerabilities.
+To report a security vulnerability, follow [our security policy](.github/SECURITY.md).
 
 ## Credits
 
