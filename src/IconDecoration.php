@@ -36,11 +36,6 @@ class IconDecoration extends Decoration
         return $this;
     }
 
-    public function isDecorative(): bool
-    {
-        return $this->label === null;
-    }
-
     public function getIcon(): string | BackedEnum | Htmlable | null
     {
         return $this->evaluate($this->icon);

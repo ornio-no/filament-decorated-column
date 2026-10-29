@@ -3,13 +3,17 @@
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\HtmlString;
 use Livewire\Livewire;
 use Ornio\FilamentDecoratedColumn\BadgeDecoration;
 use Ornio\FilamentDecoratedColumn\DecoratedColumn;
 use Ornio\FilamentDecoratedColumn\DecoratedEntry;
 use Ornio\FilamentDecoratedColumn\IconDecoration;
+use Ornio\FilamentDecoratedColumn\ImageDecoration;
+use Ornio\FilamentDecoratedColumn\ProgressDecoration;
 use Ornio\FilamentDecoratedColumn\Tests\Fixtures\Client;
 use Ornio\FilamentDecoratedColumn\Tests\Fixtures\ListClients;
+use Ornio\FilamentDecoratedColumn\TrendDecoration;
 
 it('renders prefix and suffix badges', function () {
     $client = Client::create(['name' => 'Acme']);
@@ -92,6 +96,29 @@ it('decorates infolist entries the same way', function () {
     expect($entry->getSuffix()->toHtml())->toContain('VIP Acme');
 });
 
+it('renders data-driven decorations in an infolist entry from the schema record', function () {
+    $client = Client::create(['name' => 'Acme']);
+
+    $entry = DecoratedEntry::make('name')
+        ->prefixDecorations([
+            ImageDecoration::make('logo')->image(fn (Client $record): string => "https://example.com/{$record->name}.png"),
+        ])
+        ->suffixDecorations([
+            TrendDecoration::make('growth')->value(fn (Client $record): int => strlen($record->name)),
+            ProgressDecoration::make('usage')->value(fn (Client $record): ?int => $record->name === 'Globex' ? 10 : null),
+        ]);
+
+    $entry->container(Schema::make()->record($client));
+
+    expect($entry->getPrefix()->toHtml())
+        ->toContain('src="https://example.com/Acme.png"')
+        ->toContain('&mdash;')
+        ->and($entry->getSuffix()->toHtml())
+        ->toContain('>+4.0%<')
+        ->not->toContain('progressbar')
+        ->not->toContain('width: ');
+});
+
 it('hides an unlabelled icon from screen readers', function () {
     $column = DecoratedColumn::make('name')
         ->record(Client::create(['name' => 'Globex']))
@@ -126,26 +153,76 @@ it('tints icons gray by default and with the given palette otherwise', function 
         ->toContain('color: var(--success-500)');
 });
 
+it('keeps an icon coloured gray on purpose at the default gray shade', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)->color('gray')]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain('color: var(--gray-400)')
+        ->not->toContain('--gray-500');
+});
+
+it('tints an icon with a custom palette through Filament colour variables', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([IconDecoration::make('type')->icon(Heroicon::OutlinedBriefcase)->color(['500' => '#ff6600'])]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain('--color-500: #ff6600')
+        ->toContain('fi-color');
+});
+
+it('gives an icon a tooltip that allows HTML only when the tooltip is HTML', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([
+            IconDecoration::make('plain')->icon(Heroicon::OutlinedBriefcase)->tooltip('Business client'),
+            IconDecoration::make('html')->icon(Heroicon::OutlinedBriefcase)->tooltip(new HtmlString('<b>VIP</b>')),
+            IconDecoration::make('none')->icon(Heroicon::OutlinedBriefcase),
+        ]);
+
+    $html = $column->getPrefix()->toHtml();
+
+    expect(substr_count($html, 'x-tooltip='))->toBe(2)
+        ->and($html)
+        ->toContain("content: 'Business client'")
+        ->toContain('allowHTML: false')
+        ->toContain("content: '\\u003Cb\\u003EVIP\\u003C\\/b\\u003E'")
+        ->toContain('allowHTML: true')
+        ->toContain('theme: $store.theme');
+});
+
+it('tints an icon gray when its palette name could break out of the style', function () {
+    $column = DecoratedColumn::make('name')
+        ->record(Client::create(['name' => 'Globex']))
+        ->prefixDecorations([
+            IconDecoration::make('type')
+                ->icon(Heroicon::OutlinedBriefcase)
+                ->color(fn (Client $record): string => 'success-500); background-image: url(https://evil.test/' . $record->name),
+        ]);
+
+    expect($column->getPrefix()->toHtml())
+        ->toContain('color: var(--gray-400)')
+        ->not->toContain('evil')
+        ->not->toContain('--success-');
+});
+
 it('renders the decorations inside a real Filament table cell', function () {
     Client::create(['name' => 'Acme']);
 
     $html = Livewire::test(ListClients::class)->html();
 
-    $document = new DOMDocument;
-    $previous = libxml_use_internal_errors(true);
-    $document->loadHTML($html);
-    libxml_clear_errors();
-    libxml_use_internal_errors($previous);
+    $xpath = htmlXPath($html);
 
     // Only the decorated cell is inspected: the table around it can render
     // its own SVGs (pagination, actions), while a plain TextColumn cell
     // renders none, so an <svg> here can only come from the IconDecoration.
-    $cells = (new DOMXPath($document))
-        ->query("//td[contains(concat(' ', normalize-space(@class), ' '), ' fi-ta-cell-name ')]");
+    $cells = $xpath->query("//td[contains(concat(' ', normalize-space(@class), ' '), ' fi-ta-cell-name ')]");
 
     expect($cells)->toHaveCount(1);
 
-    expect($document->saveHTML($cells->item(0)))
+    expect($xpath->document->saveHTML($cells->item(0)))
         ->toContain('Acme')
         ->toContain('Platinum Tier')
         ->toContain('<svg');

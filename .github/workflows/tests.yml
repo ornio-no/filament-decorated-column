@@ -66,6 +66,17 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
+      # Composer 2.11 refuses packages with security advisories by default, and
+      # every Laravel 11 release has advisories that won't be patched (its
+      # security support ended in March 2026). Ignore them for laravel/framework
+      # alone, so the package is still tested against it while other packages'
+      # advisories keep raising prefer-lowest's floor: without that, it installs
+      # Carbon 3.0.0, which doesn't run on PHP 8.4.
+      - name: Allow Laravel 11 despite its security advisories
+        if: matrix.laravel == '11.*'
+        shell: bash
+        run: composer config policy.advisories.ignore --json '["laravel/framework"]'
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
