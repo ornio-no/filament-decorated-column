@@ -2,6 +2,12 @@
 
 All notable changes to `filament-decorated-column` will be documented in this file.
 
+## v1.1.1 - 2026-10-29
+
+Documentation only, with no code changes.
+
+The README gains a banner and a one-line summary under the title, and fixes two mistakes: a `DotDecoration` is 0.5rem across, and an `ImageDecoration` `size()` given a unitless string such as `'32'` falls back to the default, while an integer still counts as pixels. The rest of the README is copy-edited for clarity, with exact values for the separator's opacity and the trend colours.
+
 ## v1.1.0 - 2026-10-29
 
 Six new decorations sit beside badges and icons in either slot of `DecoratedColumn` and `DecoratedEntry`:
