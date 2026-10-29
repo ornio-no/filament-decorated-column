@@ -182,6 +182,11 @@ IconDecoration::make('type')
 
 `DotDecoration::make('name')` renders a small filled circle, half a line tall, in a palette colour. Use it for a status. It has no size setting.
 
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/dot-dark.png">
+    <img src="art/screenshots/dot-light.png" alt="A table with a green, amber, red, or gray dot before each project name, and the same dot after each status, behind the default em dash separator.">
+</picture>
+
 | Method | What it sets | Default |
 | --- | --- | --- |
 | `color()` | A Filament colour name such as `success` or `danger`. Gray draws with `var(--gray-400)`; any other name uses shade 500, as an icon does. Palette arrays are not supported. | `gray` |
@@ -207,6 +212,11 @@ DecoratedColumn::make('name')
 ## Images
 
 `ImageDecoration::make('name')` renders a small picture from a URL, such as an avatar, a logo, or a flag. The picture fills its box without being stretched (`object-fit: cover`) and loads lazily.
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/image-dark.png">
+    <img src="art/screenshots/image-light.png" alt="A table with a square logo before each project name, a round avatar before each owner, and a larger 28 pixel avatar after each owner.">
+</picture>
 
 | Method | What it sets | Default |
 | --- | --- | --- |
@@ -236,6 +246,11 @@ DecoratedColumn::make('name')
 ## Text
 
 `TextDecoration::make('name')` shows its label as secondary text, such as "(you)" after a name. As on a badge, the label is derived from the name when unset, and it is escaped. The text has no size setting: it takes the size of the text around it.
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/text-dark.png">
+    <img src="art/screenshots/text-light.png" alt="A table with a gray monospace ID such as #1042 before each project name, a gray (you) after the current user's name, and a red semibold Overdue after late due dates.">
+</picture>
 
 | Method | What it sets | Default |
 | --- | --- | --- |
@@ -267,6 +282,11 @@ TextDecoration::make('overdue')
 ## Colors
 
 `ColorDecoration::make('name')` shows a raw colour from your data, such as a product's hex code, as a sample of itself. The sample is a 1.25rem square with slightly rounded corners and a thin translucent gray border, so white and black samples stay visible.
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/color-dark.png">
+    <img src="art/screenshots/color-light.png" alt="A table with a colour sample before each brand colour code, in hex, oklch, and rgb formats, including a bordered white sample.">
+</picture>
 
 | Method | What it sets | Default |
 | --- | --- | --- |
@@ -305,6 +325,11 @@ DecoratedColumn::make('color')
 
 The direction is decided after rounding, so a change of `0.04` shows as a gray `0.0%`, never as a green `+0.0%`.
 
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/trend-dark.png">
+    <img src="art/screenshots/trend-light.png" alt="A table with green rises, red falls, a gray zero, and a row with no change after each revenue figure, and inverted colours after each churn rate, where a fall is green.">
+</picture>
+
 | Method | What it sets | Default |
 | --- | --- | --- |
 | `value()` | The change, as an int or a float. A closure may also return a numeric string, which is what a `decimal` column or cast gives; any other string renders nothing. | None |
@@ -339,6 +364,11 @@ DecoratedColumn::make('churn_rate')
 ## Progress
 
 `ProgressDecoration::make('name')` shows a thin bar filled to show how far a value has come toward its maximum. The track is 3.75rem wide and 0.375rem tall, with rounded ends.
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/progress-dark.png">
+    <img src="art/screenshots/progress-light.png" alt="A table with a storage bar after each usage figure and before each percentage, in the primary colour, amber near the limit, and red and full when usage is over the limit.">
+</picture>
 
 | Method | What it sets | Default |
 | --- | --- | --- |
