@@ -119,6 +119,11 @@ Both work in any table or infolist, inside a panel or in the standalone packages
 
 `BadgeDecoration::make('name')` creates a badge. The name doubles as the default label: `BadgeDecoration::make('hot')` reads "Hot" and `BadgeDecoration::make('is_paid')` reads "Is paid".
 
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/badge-dark.png">
+    <img src="art/screenshots/badge-light.png" alt="A table with a coloured status badge after each project name behind the default em dash separator, a gray You badge after the current user, Paid and Overdue badges with icons after each invoice number, and pill-shaped plan badges before each revenue figure.">
+</picture>
+
 | Method | What it sets | Default |
 | --- | --- | --- |
 | `label()` | The text. | Derived from the name. |
@@ -157,6 +162,11 @@ BadgeDecoration::make('paid')
 ## Icons
 
 `IconDecoration::make('name')` renders an icon with no badge around it.
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="art/screenshots/icon-dark.png">
+    <img src="art/screenshots/icon-light.png" alt="A table with a gray type icon before each project name, a larger coloured status icon after each status, an amber star after the current user, and a gray calendar icon before each due date with a red clock after overdue ones.">
+</picture>
 
 | Method | What it sets | Default |
 | --- | --- | --- |
