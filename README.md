@@ -1,3 +1,5 @@
+![Filament Decorated Column: eight ways to add context to your columns. Cards show badges, icons, dots, images, text, colours, trends, and progress bars, each beside sample table text.](art/banner.png)
+
 # Filament Decorated Column
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ornio/filament-decorated-column.svg?style=flat-square)](https://packagist.org/packages/ornio/filament-decorated-column)
