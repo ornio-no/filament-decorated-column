@@ -23,7 +23,7 @@ composer test:refactor                         # Rector, dry run
 
 There is no npm step. The package ships no JS or CSS.
 
-CI runs Pest across PHP 8.2 to 8.4 and Laravel 11 to 13 (Laravel 13 needs PHP 8.3 or later), under both `prefer-lowest` and `prefer-stable`, on Linux and Windows. Keep code compatible with that whole range. Composer 2.11 refuses packages with security advisories by default, which covers every Laravel 11 release, so the tests and PHPStan workflows set `policy.advisories.block` to false for their Laravel 11 jobs only. The `filament/filament` floor in `composer.json` was found by running the suite under `prefer-lowest`; re-check it whenever the code starts using a newer Filament API. A CI workflow runs Pint on every push and auto-commits a "Fix styling" commit.
+CI runs Pest across PHP 8.2 to 8.4 and Laravel 11 to 13 (Laravel 13 needs PHP 8.3 or later), under both `prefer-lowest` and `prefer-stable`, on Linux and Windows. Keep code compatible with that whole range. Composer 2.11 refuses packages with security advisories by default, which covers every Laravel 11 release, so the tests and PHPStan workflows add `laravel/framework` to `policy.advisories.ignore` for their Laravel 11 jobs only. Don't widen that to `policy.advisories.block: false`: other packages' advisories are what keep `prefer-lowest` off versions too old to run, such as Carbon 3.0.0 on PHP 8.4. The `filament/filament` floor in `composer.json` was found by running the suite under `prefer-lowest`; re-check it whenever the code starts using a newer Filament API. A CI workflow runs Pint on every push and auto-commits a "Fix styling" commit.
 
 ## Architecture
 
