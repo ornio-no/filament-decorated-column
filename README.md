@@ -1,4 +1,4 @@
-![Filament Decorated Column: eight ways to add context to your columns. Cards show badges, icons, dots, images, text, colours, trends, and progress bars, each beside sample table text.](art/banner.png)
+<img class="filament-hidden" src="art/banner.png" alt="Filament Decorated Column: eight ways to add context to your columns. Cards show badges, icons, dots, images, text, colours, trends, and progress bars, each beside sample table text.">
 
 # Filament Decorated Column
 
